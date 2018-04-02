@@ -13,6 +13,8 @@ docker run \
 	-e MYSQL_PASSWORD=$DATABASE_PASSWORD \
 	mysql/mysql-server:5.7
 
+sleep 15
+
 docker run \
 	-d -rm \
 	--name iwegarde-server \
