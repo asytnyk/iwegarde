@@ -29,3 +29,8 @@ docker run \
 	--link mysql-iwegarde:dbserver \
 	-e DATABASE_URL=mysql+pymysql://iwegarde:$DATABASE_PASSWORD@dbserver/iwegarde \
 	iwegarde:latest
+
+docker run \
+	-d --rm
+	-p 80:5000
+	redirect-https
