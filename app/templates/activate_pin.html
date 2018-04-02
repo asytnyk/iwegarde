@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+	<h1>Activate Your Server!</h1>
+
+	{% include '_list_activation_pins.html' %}
+
+	<div class="row">
+		<font style="color:red">
+			<p>By activating this server you declare that:</p>
+			<ul>
+				<li>you have the rights to use the server.</li>
+				<li>you have the rights to use the infrastructure to which the server is connected to.</li>
+				<li>
+					you accept that <b>all</b> data on
+					internal, external, removeable, and
+					remote storage will be <b>permanently
+					deleted</b> during the installation process.
+				</li>
+			</ul>
+		</font>
+	</div>
+	<div class="row">
+		<div class="col-md-4">
+			{{ wtf.quick_form(form) }}
+		</div>
+	</div>
+{% endblock %}

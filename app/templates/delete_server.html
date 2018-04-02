@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block app_content %}
+	<h1><font style="color:red">Delete Your Server!</font></h1>
+
+	{% include '_list_servers.html' %}
+
+	<div class="row">
+		<font style="color:red">
+			<p>Please be aware that the process of deleting your server cannot be undone. Please note that:</p>
+			<ul>
+				<li>all data and all applications on the server will be permanently deleted.</li>
+				<li>applications and services running on the server will be permanently terminated.</li>
+			</ul>
+		</font>
+	</div>
+	<div class="row">
+		<div class="col-md-4">
+			{{ wtf.quick_form(form) }}
+		</div>
+	</div>
+{% endblock %}

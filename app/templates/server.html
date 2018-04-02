@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+	<h1>Your Server</h1>
+
+	{% include '_list_servers.html' %}
+	<p>Server data</p>
+	<div class="results">
+		<pre>{{ facter }}</pre>
+	</div>
+	To delete your server, click <a href="{{ url_for('delete_server', uuid=servers[0].uuid) }}">here</a>.
+{% endblock %}

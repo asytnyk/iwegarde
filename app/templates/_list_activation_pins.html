@@ -1,0 +1,33 @@
+        <table class="table table-hover">
+                <tr>
+                        <td align="left">pin</td>
+                        <td align="left">date</td>
+                        <td align="left">time</td>
+                        <td align="left">last ping</td>
+			<td align="left">manufacturer</td>
+			<td align="left">productname</td>
+			<td align="left">serial</td>
+			<td align="left">RAM size</td>
+                        <td align="left">MAC addr</td>
+			<td align="left">pin status</td>
+                </tr>
+		{% for activation in activations %}
+			{% set facts = activation.get_server().get_facts() %}
+			<tr>
+				<td align="left">{{ activation.activation_pin }}</td>
+				<td align="left">{{ activation.created.date() }}</td>
+				<td align="left">{{ activation.created.time().replace(microsecond=0) }}</td>
+				<td align="left">{{ inject_datetime_delta(activation.last_ping)['time_ago_str'] }}</td>
+				<td align="left">{{ facts.get_manufacturer() }}</td>
+				<td align="left">{{ facts.get_productname() }}</td>
+				<td align="left">{{ facts.serialnumber }}</td>
+				<td align="left">{{ facts.memorysize }}</td>
+				<td align="left">{{ facts.get_macaddress() }}</td>
+				{% if activation.active %}
+				<td align="left">active</a></td>
+				{% else %}
+				<td align="left"><a href="{{ url_for('activate_pin', activation_pin=activation.activation_pin) }}">activate pin</a></td>
+				{% endif %}
+			</tr>
+		{% endfor %}
+        </table>

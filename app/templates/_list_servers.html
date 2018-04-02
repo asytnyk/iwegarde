@@ -1,0 +1,31 @@
+        <table class="table table-hover">
+                <tr>
+                        <td align="left">created</td>
+                        <td align="left">last ping</td>
+			<td align="left">manufacturer</td>
+			<td align="left">productname</td>
+			<td align="left">serial</td>
+			<td align="left">RAM size</td>
+                        <td align="left">MAC addr</td>
+			<td align="left">server status</td>
+			<td align="left">action</td>
+                </tr>
+		{% for server in servers %}
+			{% set facts = server.get_facts() %}
+			<tr>
+				<td align="left">{{ server.created.date() }}</td>
+				<td align="left">{{ inject_datetime_delta(server.last_ping)['time_ago_str'] }}</td>
+				<td align="left">{{ facts.get_manufacturer()[:16] }}</td>
+				<td align="left">{{ facts.get_productname()[:16] }}</rd>
+				<td align="left">{{ facts.serialnumber[-16:] }}</td>
+				<td align="left">{{ facts.memorysize }}</td>
+				<td align="left">{{ facts.get_macaddress() }}</td>
+				{% if server.active %}
+				<td align="left">active</a></td>
+				{% else %}
+				<td align="left">inactive</a></td>
+				{% endif %}
+				<td align="left"><a href="{{ url_for('server', uuid=server.uuid) }}">edit</a></td>
+			</tr>
+		{% endfor %}
+        </table>
