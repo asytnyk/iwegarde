@@ -31,6 +31,6 @@ docker run \
 	iwegarde:latest
 
 docker run \
-	-d --rm
-	-p 80:5000
+	-d --rm \
+	-p 80:5000 \
 	redirect-https
