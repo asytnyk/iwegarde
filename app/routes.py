@@ -163,7 +163,7 @@ def unfollow(username):
 @app.route('/explore')
 @login_required
 def explore():
-    if current_user != User.query.filter_by(username=peter):
+    if current_user != User.query.filter_by(username='peter').first():
         return redirect(url_for('index'))
     page = request.args.get('page', 1, type=int)
     posts = Post.query.order_by(Post.timestamp.desc()).paginate(
