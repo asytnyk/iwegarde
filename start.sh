@@ -32,5 +32,6 @@ docker run \
 
 docker run \
 	-d --rm \
+	--name redirect-https \
 	-p 80:5000 \
 	redirect-https
