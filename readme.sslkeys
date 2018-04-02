@@ -1,0 +1,10 @@
+[peter@nukaneko ~]$ certbot renew
+
+peter@beta-iwegarde ~/letsencrypt/htdocs $ sudo iptables -A INPUT -p tcp --dport 80\
+	-m conntrack --ctstate NEW,ESTABLISHED -j ACCEPT
+
+peter@beta-iwegarde ~/letsencrypt/htdocs $ echo 'RuIxoqN8h8ua2yLBVN3WJxtCLX1ss6e90B1RKPawAns.gpylPIRjdi3euZyCE57URku6ZNlR65J06gT9jWOvBUc' > .well-known/acme-challenge/RuIxoqN8h8ua2yLBVN3WJxtCLX1ss6e90B1RKPawAns
+
+peter@beta-iwegarde ~/letsencrypt/htdocs $ sudo python -m SimpleHTTPServer 80
+
+
