@@ -164,7 +164,7 @@ def unfollow(username):
 @login_required
 def explore():
     if current_user != User.query.filter_by(username=peter):
-        return redirect(url_for('index')
+        return redirect(url_for('index'))
     page = request.args.get('page', 1, type=int)
     posts = Post.query.order_by(Post.timestamp.desc()).paginate(
             page, app.config['POSTS_PER_PAGE'], False)
