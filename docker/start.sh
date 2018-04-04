@@ -5,7 +5,7 @@ DATABASE_PASSWORD=V96vBX5apwvO8s3eu
 #	--mount type=bind,src=/home/peter/mysql-iwegarde,dst=/var/lib/mysql # For newer dockers...
 docker run \
 	--name mysql-iwegarde \
-	-d --rm \
+	-d \
 	--restart unless-stopped \
 	-v /home/peter/mysql-iwegarde:/var/lib/mysql \
 	-e MYSQL_RANDOM_ROOT_PASSWORD=yes \
@@ -16,7 +16,7 @@ docker run \
 
 #	-it --entrypoint /bin/sh \
 docker run \
-	-d --rm \
+	-d \
 	--restart unless-stopped \
 	--name iwegarde-server \
 	-p 443:5000 \
@@ -31,7 +31,7 @@ docker run \
 	iwegarde:latest
 
 docker run \
-	-d --rm \
+	-d \
 	--restart unless-stopped \
 	--name redirect-https \
 	-p 80:5000 \
