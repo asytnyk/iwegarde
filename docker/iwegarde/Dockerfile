@@ -13,7 +13,6 @@ RUN venv/bin/pip install gunicorn pymysql
 COPY app app
 COPY migrations migrations
 COPY iwegarde.py config.py boot.sh ./
-COPY fullchain.pem privkey.pem ./
 
 RUN chmod +x boot.sh
 

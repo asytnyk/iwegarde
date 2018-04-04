@@ -14,12 +14,12 @@ docker run \
 	-e MYSQL_PASSWORD=$DATABASE_PASSWORD \
 	mysql/mysql-server:5.7
 
+#	-p 443:5000 \
 #	-it --entrypoint /bin/sh \
 docker run \
 	-d \
 	--restart unless-stopped \
 	--name iwegarde-server \
-	-p 443:5000 \
 	-e SECRET_KEY=4iCyF4zG3bxwueOFP32u \
 	-e MAIL_SERVER=smtp.googlemail.com \
 	-e MAIL_PORT=587 \
@@ -30,9 +30,13 @@ docker run \
 	-e DATABASE_URL=mysql+pymysql://iwegarde:$DATABASE_PASSWORD@dbserver/iwegarde \
 	iwegarde:latest
 
+#	-e NGINX_PROXY_PASS=http://webserver \
 docker run \
 	-d \
 	--restart unless-stopped \
-	--name redirect-https \
-	-p 80:5000 \
-	redirect-https
+	-v /home/peter/static-content:/static-content \
+	--name nginx-iwegarde \
+	-p 443:5000 \
+	-p 80:5080 \
+	--link iwegarde-server:webserver \
+	nginx-iwegarde:latest
