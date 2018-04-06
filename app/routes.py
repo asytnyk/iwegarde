@@ -298,26 +298,32 @@ def create_it_all(user, facter_json, session):
 @app.route('/request_activation_pin', methods=['GET', 'POST'])
 def request_activation_pin():
     if current_user.is_authenticated:
+        app.logger.error('authenticated user trying to get an activation pin: {}'.format(current_user.username))
         return render_template('404.html'), 404
 
     installation_key = request.headers.get('installation_key')
     if not installation_key:
+        app.logger.error('missing installation key on header')
         return render_template('404.html'), 404
 
     user = User.verify_installation_key_token(installation_key)
     if not user:
+        app.logger.error('Installation key verification failed')
         return render_template('404.html'), 404
 
     try:
         facter_json = request.get_json()
     except:
+        app.logger.error('could find facter json on the http request')
         return render_template('404.html'), 404
 
     try:
         json.dumps(facter_json)
     except:
+        app.logger.error('could not parse facter json')
         return render_template('404.html'), 404
     if not facter_json:
+        app.logger.error('facter json is empty')
         return render_template('404.html'), 404
 
     #TODO: Add mac address
@@ -334,6 +340,7 @@ def request_activation_pin():
                 ).first()
     except:
         error = {'error': 'The data we got is not right. Are you using the latest version of the installer?'}
+        app.logger.error(error['error'])
         return Response(json.dumps(error), mimetype='application/json')
 
     if facts:
@@ -343,6 +350,7 @@ def request_activation_pin():
                         url_for('server', uuid=server.uuid, _external=True))}
         else:
             error = {'error': 'Something is wrong. If this server was activated in the past, deactivate it before continuing.'}
+        app.logger.error(error['error'])
         return Response(json.dumps(error), mimetype='application/json')
 
     activation, facts, server = create_it_all(user, facter_json, db.session)
