@@ -4,8 +4,10 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager
 import logging
-from logging.handlers import SMTPHandler, RotatingFileHandler
-import os
+#from logging.handlers import SMTPHandler, RotatingFileHandler
+from logging.handlers import SMTPHandler
+from logging import StreamHandler
+import sys, os
 from flask_mail import Mail
 from flask_bootstrap import Bootstrap
 
@@ -47,6 +49,11 @@ if not app.debug:
 #    file_handler.setLevel(logging.INFO)
 #    app.logger.addHandler(file_handler)
 
+    stream_handler = StreamHandler(sys.stdout)
+    stream_handler.setFormatter(logging.Formatter(
+        '%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'))
+    stream_handler.setLevel(logging.INFO)
+    app.logger.addHandler(stream_handler)
 
     app.logger.setLevel(logging.INFO)
     app.logger.info('iWe Frontend startup')
