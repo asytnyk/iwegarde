@@ -301,7 +301,7 @@ def request_activation_pin():
         app.logger.info('authenticated user trying to get an activation pin: {}'.format(current_user.username))
         return render_template('404.html'), 404
 
-    installation_key = request.headers.get('installation_key')
+    installation_key = request.headers.get('installation-key')
     if not installation_key:
         app.logger.info('missing installation key on header')
         return render_template('404.html'), 404
