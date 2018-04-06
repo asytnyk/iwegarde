@@ -237,7 +237,7 @@ def download_installation_key():
             str(expires) + '.json'
     access_token = {
             'installation_key': current_user.get_installation_key_token(),
-            'request_activation_url': url_for('request_activation_pin', _external=True)
+            'request_activation_url': url_for('request_activation_pin', _external=True, _scheme='https')
             }
 
     body = 'Downloaded installation key '+ current_user.username + '-' + str(expires)
@@ -347,7 +347,7 @@ def request_activation_pin():
         server = Server.query.filter_by(facter_facts_id = facts.id).first()
         if user.id == server.user_id:
             error = {'error': 'This server is already active, delete it before continuing:{}'.format(
-                        url_for('server', uuid=server.uuid, _external=True))}
+                        url_for('server', uuid=server.uuid, _external=True, _scheme='https'))}
         else:
             error = {'error': 'Something is wrong. If this server was activated in the past, deactivate it before continuing.'}
         app.logger.info(error['error'])
