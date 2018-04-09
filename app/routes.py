@@ -236,7 +236,7 @@ def download_installation_key():
     filename = 'iWe-install-key-' + current_user.username + '-' + \
             str(expires) + '.json'
     access_token = {
-            'installation_key': current_user.get_installation_key_token(),
+            'installation-key': current_user.get_installation_key_token(),
             'request_activation_url': url_for('request_activation_pin', _external=True, _scheme='https')
             }
 
@@ -386,7 +386,7 @@ def download_server_keys(activation_pin):
     if current_user.is_authenticated:
         return render_template('404.html'), 404
 
-    installation_key = request.headers.get('installation_key')
+    installation_key = request.headers.get('installation-key')
     if not installation_key:
         return render_template('404.html'), 404
 
