@@ -9,3 +9,7 @@ def not_found_error(error):
 def not_found_error(error):
     db.session.rollback()
     return render_template('500.html'), 500
+
+__author__ = "Peter Senna Tschudin"
+__copyright__ = "Copyright (C) 2018 Peter Senna Tschudin"
+__license__ = "GPLv2"

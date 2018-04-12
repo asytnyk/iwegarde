@@ -22,3 +22,7 @@ def send_password_reset_email(user):
                 user=user, token=token),
             html_body=render_template('email/reset_password.html',
                 user=user, token=token))
+
+__author__ = "Peter Senna Tschudin"
+__copyright__ = "Copyright (C) 2018 Peter Senna Tschudin"
+__license__ = "GPLv2"

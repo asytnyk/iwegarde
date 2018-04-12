@@ -666,3 +666,7 @@ def delete_server(uuid):
     else:
         flash('Password, serial or MAC address are invalid.')
         return redirect(url_for('delete_server', uuid=uuid))
+
+__author__ = "Peter Senna Tschudin"
+__copyright__ = "Copyright (C) 2018 Peter Senna Tschudin"
+__license__ = "GPLv2"

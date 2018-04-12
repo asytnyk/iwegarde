@@ -59,3 +59,7 @@ if not app.debug:
     app.logger.info('iWe Frontend startup')
 
 from app import routes, models, errors
+
+__author__ = "Peter Senna Tschudin"
+__copyright__ = "Copyright (C) 2018 Peter Senna Tschudin"
+__license__ = "GPLv2"

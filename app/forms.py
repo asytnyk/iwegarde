@@ -74,3 +74,7 @@ class DeleteServerForm(FlaskForm):
     serialnumber = StringField('serial', validators=[DataRequired(),])
     password = PasswordField('Password', validators=[DataRequired(), Length(min=6, max=12)])
     submit = SubmitField('Delete Server')
+
+__author__ = "Peter Senna Tschudin"
+__copyright__ = "Copyright (C) 2018 Peter Senna Tschudin"
+__license__ = "GPLv2"

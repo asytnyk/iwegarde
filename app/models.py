@@ -271,3 +271,7 @@ class FacterFacts(db.Model):
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
+
+__author__ = "Peter Senna Tschudin"
+__copyright__ = "Copyright (C) 2018 Peter Senna Tschudin"
+__license__ = "GPLv2"

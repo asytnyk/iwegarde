@@ -39,3 +39,7 @@ def gen_ssh_key_pair():
     os.remove(filename + '.pub')
 
     return (pub_key, priv_key)
+
+__author__ = "Peter Senna Tschudin"
+__copyright__ = "Copyright (C) 2018 Peter Senna Tschudin"
+__license__ = "GPLv2"
