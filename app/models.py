@@ -130,7 +130,6 @@ class User(UserMixin, db.Model):
 
         return True
 
-
     def __repr__(self):
         return '<User {}>'.format(self.username)
 
@@ -267,6 +266,10 @@ class FacterFacts(db.Model):
 
     def add_macaddress(self, macaddress):
             self.mac_addresses.append(macaddress)
+
+    def remove_macaddress(self, macaddress):
+            self.mac_addresses.remove(macaddress)
+            FacterMacaddress.query.filter_by(id=macaddress.id).delete()
 
 @login.user_loader
 def load_user(id):

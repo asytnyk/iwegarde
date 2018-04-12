@@ -634,6 +634,8 @@ def delete_server(uuid):
     facter = json.dumps(json.loads(server.get_facts().facter_json), sort_keys = True, indent = 4,
             separators = (',', ': '))
 
+    body = 'Server with serialnumber {} and MAC address {} deleted'.format(facts.serialnumber, facts.get_macaddress())
+
     form = DeleteServerForm()
     if form.validate_on_submit():
         if not current_user.check_password(form.password.data):
@@ -648,12 +650,15 @@ def delete_server(uuid):
             flash('Wrong MAC address.')
             return redirect(url_for('delete_server', uuid=uuid))
 
+        macaddress = facts.get_macaddress()
+        facts.remove_macaddress(FacterMacaddress.query.filter_by(macaddress=macaddress).first())
+
         if current_user.delete_server(uuid) == False:
             flash('Could not delete server.')
             return redirect(url_for('delete_server', uuid=uuid))
 
-        body = 'Server with serialnumber {} and MAC address {} deleted'.format(facts.serialnumber, facts.get_macaddress())
         flash(body)
+
         post = Post(body=body, author=current_user)
         db.session.add(post)
         db.session.commit()
