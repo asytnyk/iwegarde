@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 from time import time
 from random import randrange
 import subprocess, os
+import urllib3, requests
 from app.models import User, Post, Server, Activation
 from app.models import FacterVersion, FacterMacaddress, FacterArchitecture, FacterVirtual, FacterType
 from app.models import FacterManufacturer, FacterProductname, FacterProcessor, FacterFacts, Sshkey
@@ -406,17 +407,28 @@ def download_server_keys(activation_pin):
 
     server = Server.query.filter_by(id = activation.server_id).first()
 
-    cmd = [app.config['EASY_RSA_GEN'], server.uuid]
-    pwd = os.path.dirname(os.path.realpath(__file__))
-    cwd = '{}/{}'.format(pwd, app.config['EASY_RSA_PATH'])
-    ret = subprocess.run(cmd, cwd=cwd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    # We use HTTPS to avoid clear text transmission of the secret-key and of the keys for cases in
+    # which communication between containers get compromised.  verify=False is only acceptable while
+    # communication is local, like when the two containers are running on the same host(Imagine one
+    # of the containers get compromised and the attacker installs a sniffer on the network, or if
+    # running on a VM, the traffic can be exposed on the host). At the time of writing this comment,
+    # the SSL keys were created when Docker builds the PKI container. We need to find a better
+    # solution.
+    urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+    keys_request = requests.get(
+        '{}/{}'.format(app.config['PKI_URL'], server.uuid),
+        headers={'secret-key': app.config['PKI_SECRET']},
+        verify=False)
 
-    if ret.returncode != 0:
+    if keys_request.status_code == 403:
+        app.logger.error("PKI authentication failure. Check app.config['PKI_SECRET']")
+        return '', HTTP_204_NO_CONTENT
+
+    if keys_request.status_code != 200:
         error = {'error': 'Problem found when creating keys. You may need to delete the server and try again.'}
-        print (ret)
         return Response(json.dumps(error), mimetype='application/json')
 
-    keys_json = json.loads(ret.stdout)
+    keys_json = keys_request.json()
 
     pub, priv = gen_ssh_key_pair()
     if not pub or not priv:
@@ -443,8 +455,8 @@ def download_server_keys(activation_pin):
 
     filename='client_conf.json'
     client_conf={
-          'vpn_client_pvt_key': keys_json['vpn_client_pvt_key'],
-          'vpn_client_crt': keys_json['vpn_client_crt'],
+          'vpn_client_pvt_key': keys_json['pvt_key'],
+          'vpn_client_crt': keys_json['crt'],
           'vpn_ca_crt': vpn_ca_crt,
           'vpn_ta_key': vpn_ta_key,
           'vpn_client_conf': vpn_client_conf,
