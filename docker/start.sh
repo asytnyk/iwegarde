@@ -8,7 +8,7 @@ docker run \
 	--name mysql-iwegarde \
 	-d \
 	--restart unless-stopped \
-	-v /home/peter/mysql-iwegarde:/var/lib/mysql \
+	-v /mnt/stateful_partition/iwe/mysql-iwegarde:/var/lib/mysql \
 	-e MYSQL_RANDOM_ROOT_PASSWORD=yes \
 	-e MYSQL_DATABASE=iwegarde \
 	-e MYSQL_USER=iwegarde \
@@ -19,7 +19,7 @@ docker run \
 	-d \
 	--restart unless-stopped \
 	--name iwe_pki \
-	-v /home/peter/iwe_pki/pki:/home/iwepki/easy-rsa3/pki \
+	-v /mnt/stateful_partition/iwe/pki/pki:/home/iwepki/easy-rsa3/pki \
 	-e SECRET_KEY=$PKI_PASSWORD \
 	iwe_pki:latest
 
@@ -29,7 +29,7 @@ docker run \
 	-d \
 	--restart unless-stopped \
 	--name iwegarde-server \
-	-v /home/peter/iwe_client_vpn_config:/home/iwegarde/iwe_client_vpn_config \
+	-v /mnt/stateful_partition/iwe/client_vpn_config:/home/iwegarde/iwe_client_vpn_config \
 	--link mysql-iwegarde:dbserver \
 	--link iwe_pki:pkiserver \
 	-e SECRET_KEY=4iCyF4zG3bxwueOFP32u \
@@ -47,7 +47,7 @@ docker run \
 docker run \
 	-d \
 	--restart unless-stopped \
-	-v /home/peter/static-content:/static-content \
+	-v /mnt/stateful_partition/iwe/static-content:/static-content \
 	--name nginx-iwegarde \
 	-p 443:5000 \
 	-p 80:5080 \

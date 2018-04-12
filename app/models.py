@@ -119,13 +119,17 @@ class User(UserMixin, db.Model):
         if activation_query:
             activation_query.delete()
 
+        macaddress = facts.get_macaddress()
+        facts.remove_macaddress(FacterMacaddress.query.filter_by(macaddress=macaddress).first())
+
         sshkey_query = Sshkey.query.filter_by(id=server.sshkey_id)
         if sshkey_query:
             sshkey_query.delete()
 
+        server_query.delete()
+
         facts_query.delete()
 
-        server_query.delete()
         db.session.commit()
 
         return True
@@ -150,7 +154,7 @@ class Sshkey(db.Model):
 class Vpnkey(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     crt = db.Column(db.String(8192))
-    key = db.Column(db.String(4096))
+    pvt_key = db.Column(db.String(4096))
     revoked = db.Column(db.Boolean, default=False)
     blocked = db.Column(db.Boolean, default=False)
 

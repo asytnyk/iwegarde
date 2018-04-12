@@ -1,8 +1,8 @@
 """initial migration
 
-Revision ID: ec95e3e75119
+Revision ID: 9f76c7aa0658
 Revises: 
-Create Date: 2018-04-02 19:03:11.391796
+Create Date: 2018-04-12 18:47:02.027738
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'ec95e3e75119'
+revision = '9f76c7aa0658'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -78,7 +78,7 @@ def upgrade():
     op.create_table('vpnkey',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('crt', sa.String(length=8192), nullable=True),
-    sa.Column('key', sa.String(length=4096), nullable=True),
+    sa.Column('pvt_key', sa.String(length=4096), nullable=True),
     sa.Column('revoked', sa.Boolean(), nullable=True),
     sa.Column('blocked', sa.Boolean(), nullable=True),
     sa.PrimaryKeyConstraint('id')

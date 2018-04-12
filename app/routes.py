@@ -9,7 +9,7 @@ import subprocess, os
 import urllib3, requests
 from app.models import User, Post, Server, Activation
 from app.models import FacterVersion, FacterMacaddress, FacterArchitecture, FacterVirtual, FacterType
-from app.models import FacterManufacturer, FacterProductname, FacterProcessor, FacterFacts, Sshkey
+from app.models import FacterManufacturer, FacterProductname, FacterProcessor, FacterFacts, Sshkey, Vpnkey
 from app import app, db
 from app.email import send_password_reset_email
 from app.forms import LoginForm, RegistrationForm, EditProfileForm, PostForm, ActivatePinForm
@@ -429,6 +429,13 @@ def download_server_keys(activation_pin):
         return Response(json.dumps(error), mimetype='application/json')
 
     keys_json = keys_request.json()
+    vpn_key = Vpnkey(crt=keys_json['crt'], pvt_key=keys_json['pvt_key'])
+    db.session.add(vpn_key)
+    db.session.commit()
+
+    server.vpnkey_id = vpn_key.id
+    db.session.add(server)
+    db.session.commit()
 
     pub, priv = gen_ssh_key_pair()
     if not pub or not priv:
@@ -441,7 +448,7 @@ def download_server_keys(activation_pin):
     db.session.commit()
 
     server.sshkey_id = ssh_key.id
-    db.session.add(ssh_key)
+    db.session.add(server)
     db.session.commit()
     
     with open(app.config['VPN_CLIENT_CONFIG'], 'r') as vpn_client_conf_file:
@@ -649,9 +656,6 @@ def delete_server(uuid):
         if form.macaddress.data.lower() != facts.get_macaddress().lower():
             flash('Wrong MAC address.')
             return redirect(url_for('delete_server', uuid=uuid))
-
-        macaddress = facts.get_macaddress()
-        facts.remove_macaddress(FacterMacaddress.query.filter_by(macaddress=macaddress).first())
 
         if current_user.delete_server(uuid) == False:
             flash('Could not delete server.')
