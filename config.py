@@ -1,6 +1,8 @@
 import os
+from pathlib import Path
 
 basedir = os.path.abspath(os.path.dirname(__file__))
+homedir = str(Path.home())
 
 class Config(object):
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'Q8kBexsnBz9k1Fycr'
@@ -25,6 +27,6 @@ class Config(object):
     PKI_URL = os.environ.get('PKI_URL') or 'https://iwe_pki:4000/build_client_full'
     PKI_SECRET = os.environ.get('PKI_SECRET') or 'ulVL1aw6CmNrN0dOGq0'
 
-    VPN_CLIENT_CONFIG = '/home/peter/dev/iwe/vpn/hosts-vpn/client/client.conf'
-    VPN_CA_CRT = '/home/peter/dev/iwe/vpn/hosts-vpn/client/ca.crt'
-    VPN_TA_KEY = '/home/peter/dev/iwe/vpn/hosts-vpn/client/ta.key'
+    VPN_CLIENT_CONFIG = '{}/iwe_client_vpn_config/client.conf'.format(homedir)
+    VPN_CA_CRT = '{}/iwe_client_vpn_config/ca.crt'.format(homedir)
+    VPN_TA_KEY = '{}/iwe_client_vpn_config/ta.key'.format(homedir)

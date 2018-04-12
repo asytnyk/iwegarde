@@ -1,6 +1,7 @@
 FROM python:3.6-alpine
+RUN apk add --no-cache openssh-client
 
-RUN adduser -D iwegarde
+RUN adduser -D iwegarde -u 5000 -g 5000
 
 WORKDIR /home/iwegarde
 
