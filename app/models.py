@@ -122,11 +122,15 @@ class User(UserMixin, db.Model):
         macaddress = facts.get_macaddress()
         facts.remove_macaddress(FacterMacaddress.query.filter_by(macaddress=macaddress).first())
 
+        server_query.delete()
+
         sshkey_query = Sshkey.query.filter_by(id=server.sshkey_id)
         if sshkey_query:
             sshkey_query.delete()
 
-        server_query.delete()
+        vpnkey_query = Vpnkey.query.filter_by(id=server.vpnkey_id)
+        if vpnkey_query:
+            vpnkey_query.delete()
 
         facts_query.delete()
 
