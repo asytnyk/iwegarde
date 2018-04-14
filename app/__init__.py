@@ -51,7 +51,7 @@ if not app.debug:
 
     stream_handler = StreamHandler(sys.stdout)
     stream_handler.setFormatter(logging.Formatter(
-        '%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'))
+        '%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d(%(funcName)s)]'))
     stream_handler.setLevel(logging.INFO)
     app.logger.addHandler(stream_handler)
 
