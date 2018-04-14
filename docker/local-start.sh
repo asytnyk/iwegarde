@@ -25,6 +25,7 @@ docker run \
 	iwe_pki:latest
 
 echo mount /mnt/stateful_partition/iwe/client_vpn_config/ $HOME/iwe_client_vpn_config/ ...
+sudo umount $HOME/iwe_client_vpn_config/
 sudo mount -o bind /mnt/stateful_partition/iwe/client_vpn_config/ $HOME/iwe_client_vpn_config/
 
 echo "export DATABASE_URL=mysql+pymysql://iwegarde:$DATABASE_PASSWORD@localhost/iwegarde"
