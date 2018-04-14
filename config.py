@@ -30,3 +30,5 @@ class Config(object):
     VPN_CLIENT_CONFIG = '{}/iwe_client_vpn_config/client.conf'.format(homedir)
     VPN_CA_CRT = '{}/iwe_client_vpn_config/ca.crt'.format(homedir)
     VPN_TA_KEY = '{}/iwe_client_vpn_config/ta.key'.format(homedir)
+
+    VPN_CLIENT_CONNECT_SECRET_KEY = os.environ.get('VPN_CLIENT_CONNECT_SECRET_KEY') or 'Su6oLpYQv5whthmNrjtf'

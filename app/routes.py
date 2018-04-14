@@ -1,5 +1,5 @@
 from flask import render_template, flash, redirect, request, url_for, json, jsonify, Response
-from flask import send_from_directory
+from flask import send_from_directory, abort
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 from datetime import datetime, timedelta
@@ -552,6 +552,10 @@ def activate_pin(activation_pin):
             return redirect(url_for('activate_pin', activation_pin=activation_pin))
 
         activation.active = True
+
+        server = Server.query.filter_by(id=activation.server_id).first()
+        server.active = True
+
         db.session.commit()
         flash('Pin {} is now active'.format(activation_pin))
 
@@ -675,6 +679,61 @@ def delete_server(uuid):
     else:
         flash('Password, serial or MAC address are invalid.')
         return redirect(url_for('delete_server', uuid=uuid))
+
+# TODOs: Create Connection history(Controller, Connected. Connected for, Disconecter, Disconnected for)
+#        Process the json file which was generated from environment variables from OpenVNP
+@app.route('/backend/vpn/<vpn_name>/client-connect/<uuid>', methods=['GET', 'POST'])
+def vpn_client_connect(vpn_name, uuid):
+    # This can later be used to allow for multiple VPNs
+    if vpn_name != 'hosts':
+        abort(404)
+
+    secret = request.headers.get('secret-key')
+    if not secret or secret != app.config['VPN_CLIENT_CONNECT_SECRET_KEY']:
+        abort(403)
+
+    try:
+        vpn_client_json = request.get_json()
+    except:
+        app.logger.info('Exception when trying to get json from request')
+        abort(400)
+
+    if not vpn_client_json:
+        abort(400)
+
+    server = Server.query.filter_by(uuid=uuid).first()
+    if not server:
+        app.logger.info('Server with uuid {} not found'.format(uuid))
+        return jsonify({'uuid': uuid, 'vpn-name': vpn_name, 'allow-connection': 'False'})
+
+    if not server.active:
+        app.logger.info('Server with uuid {} not active'.format(uuid))
+        return jsonify({'uuid': uuid, 'vpn-name': vpn_name, 'allow-connection': 'False'})
+
+    server.last_ping = datetime.utcnow()
+    db.session.commit()
+
+    app.logger.info('Server {} connected to {} vpn'.format(uuid, vpn_name))
+
+    return jsonify({'uuid': uuid, 'vpn-name': vpn_name, 'allow-connection': 'True'})
+
+@app.route('/backend/vpn/<vpn_name>/client-disconnect/<uuid>')
+def vpn_client_disconnect(vpn_name, uuid):
+    # This can later be used to allow for multiple VPNs
+    if vpn_name != 'hosts':
+        abort(404)
+
+    secret = request.headers.get('secret-key')
+    if not secret or secret != app.config['VPN_CLIENT_CONNECT_SECRET_KEY']:
+        abort(403)
+
+    server = Server.query.filter_by(uuid=uuid).first()
+    if not server:
+        app.logger.info('Server with uuid {} not found'.format(uuid))
+
+    app.logger.info('Server {} disconnected from {} vpn'.format(uuid, vpn_name))
+
+    return '', HTTP_204_NO_CONTENT
 
 __author__ = "Peter Senna Tschudin"
 __copyright__ = "Copyright (C) 2018 Peter Senna Tschudin"
