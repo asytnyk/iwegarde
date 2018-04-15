@@ -699,6 +699,7 @@ def vpn_client_connect(vpn_name, uuid):
         abort(400)
 
     if not vpn_client_json:
+        app.logger.info('No json data sent with the request')
         abort(400)
 
     server = Server.query.filter_by(uuid=uuid).first()
