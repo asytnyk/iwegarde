@@ -462,6 +462,7 @@ def download_server_keys(activation_pin):
 
     filename='client_conf.json'
     client_conf={
+          'server_uuid': server.uuid,
           'vpn_client_pvt_key': keys_json['pvt_key'],
           'vpn_client_crt': keys_json['crt'],
           'vpn_ca_crt': vpn_ca_crt,
