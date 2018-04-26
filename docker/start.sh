@@ -1,6 +1,7 @@
 #!/bin/sh
 
 DATABASE_PASSWORD=V96vBX5apwvO8s3eu
+DATABASE_USER=iwegarde
 PKI_PASSWORD=dt7ltvQew97XJt4uQF
 VPN_CLIENT_CONNECT_SECRET_KEY=BF9guWTBFEyrUKX2Go6twtQt
 
@@ -12,7 +13,7 @@ docker run \
 	-v /mnt/stateful_partition/iwe/mysql-iwegarde:/var/lib/mysql \
 	-e MYSQL_RANDOM_ROOT_PASSWORD=yes \
 	-e MYSQL_DATABASE=iwegarde \
-	-e MYSQL_USER=iwegarde \
+	-e MYSQL_USER=$DATABASE_USER \
 	-e MYSQL_PASSWORD=$DATABASE_PASSWORD \
 	mysql/mysql-server:5.7
 
@@ -45,6 +46,14 @@ docker run \
 	-e VPN_CLIENT_CONNECT_SECRET_KEY=$VPN_CLIENT_CONNECT_SECRET_KEY \
 	iwegarde:latest
 
+docker run \
+	-d \
+	--restart unless-stopped \
+	--name phpmyadmin \
+	--link mysql-iwegarde:db \
+	-e MYSQL_USER=$DATABASE_USER \
+	phpmyadmin/phpmyadmin
+
 #	-e NGINX_PROXY_PASS=http://webserver \
 docker run \
 	-d \
@@ -54,4 +63,5 @@ docker run \
 	-p 443:5000 \
 	-p 80:5080 \
 	--link iwegarde-server:webserver \
+	--link phpmyadmin:phpmyadmin \
 	nginx-iwegarde:latest
