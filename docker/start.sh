@@ -52,6 +52,7 @@ docker run \
 	--name phpmyadmin \
 	--link mysql-iwegarde:db \
 	-e MYSQL_USER=$DATABASE_USER \
+	-e PMA_ABSOLUTE_URI="https://beta.iwe.cloud/phpmyadmin_8ojYYBSSzagA8Hk1v/" \
 	phpmyadmin/phpmyadmin
 
 #	-e NGINX_PROXY_PASS=http://webserver \
