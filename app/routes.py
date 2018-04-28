@@ -262,6 +262,12 @@ def create_it_all(user, facter_json, session):
 
     (macaddress, created) = get_one_or_create(session, FacterMacaddress, macaddress = facter_json['macaddress'])
 
+    # TODO: Fixme: Need to identify primary disk here, there is another place waiting for the same
+    # fix a few lines below. Search for sda...
+    blockdevice_sda_size = 0
+    if 'blockdevice_sda_size' in facter_json:
+        blockdevice_sda_size = facter_json['blockdevice_sda_size']
+
     facts = FacterFacts(
             is_virtual = facter_json['is_virtual'],
             serialnumber = facter_json['serialnumber'],
@@ -270,8 +276,7 @@ def create_it_all(user, facter_json, session):
             processorcount = facter_json['processorcount'],
             memorysize = facter_json['memorysize'],
             memorysize_mb = facter_json['memorysize_mb'],
-            blockdevice_sda_size = facter_json['blockdevice_sda_size'],
-
+            blockdevice_sda_size = blockdevice_sda_size,
             facterversion_id = facterversion.id,
             architecture_id = architecture.id,
             virtual_id = virtual.id,
@@ -327,7 +332,13 @@ def request_activation_pin():
         app.logger.info('facter json is empty')
         return render_template('404.html'), 404
 
-    #TODO: Add mac address
+    # TODO1: Add mac address
+    # TODO2: Fixme: Need to identify primary disk here, there is another place waiting for the same
+    # fix a few lines below. Search for sda...
+    blockdevice_sda_size = 0
+    if 'blockdevice_sda_size' in facter_json:
+        blockdevice_sda_size = facter_json['blockdevice_sda_size']
+
     try:
         facts = FacterFacts.query.filter(
                 FacterFacts.is_virtual == facter_json['is_virtual'],
@@ -337,7 +348,7 @@ def request_activation_pin():
                 FacterFacts.processorcount == facter_json['processorcount'],
                 FacterFacts.memorysize == facter_json['memorysize'],
                 FacterFacts.memorysize_mb == facter_json['memorysize_mb'],
-                FacterFacts.blockdevice_sda_size == facter_json['blockdevice_sda_size'],
+                FacterFacts.blockdevice_sda_size == blockdevice_sda_size,
                 ).first()
     except:
         error = {'error': 'The data we got is not right. Are you using the latest version of the installer?'}
