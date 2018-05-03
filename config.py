@@ -32,3 +32,4 @@ class Config(object):
     VPN_TA_KEY = '{}/iwe_client_vpn_config/ta.key'.format(homedir)
 
     VPN_CLIENT_CONNECT_SECRET_KEY = os.environ.get('VPN_CLIENT_CONNECT_SECRET_KEY') or 'Su6oLpYQv5whthmNrjtf'
+    SERVERS_QUERY_BY_TAG = os.environ.get('SERVERS_QUERY_BY_TAG') or 'jreSytvMpFK7FAZp'

@@ -4,6 +4,7 @@ DATABASE_PASSWORD=V96vBX5apwvO8s3eu
 DATABASE_USER=iwegarde
 PKI_PASSWORD=dt7ltvQew97XJt4uQF
 VPN_CLIENT_CONNECT_SECRET_KEY=BF9guWTBFEyrUKX2Go6twtQt
+SERVERS_QUERY_BY_TAG=4htwt6MCV9oGTOpaTS0
 
 #	--mount type=bind,src=/home/peter/mysql-iwegarde,dst=/var/lib/mysql # For newer dockers...
 docker run \
@@ -44,6 +45,7 @@ docker run \
 	-e PKI_URL="https://pkiserver:5000/build_client_full" \
 	-e PKI_SECRET=$PKI_PASSWORD \
 	-e VPN_CLIENT_CONNECT_SECRET_KEY=$VPN_CLIENT_CONNECT_SECRET_KEY \
+	-e SERVERS_QUERY_BY_TAG=$SERVERS_QUERY_BY_TAG \
 	iwegarde:latest
 
 docker run \

@@ -748,6 +748,35 @@ def vpn_client_disconnect(vpn_name, uuid):
 
     return '', HTTP_204_NO_CONTENT
 
+@app.route('/backend/servers/query/by-tags')
+def servers_query_by_tags():
+    # This should really query by tag instead of simply returning all servers
+    secret = request.headers.get('secret-key')
+    if not secret or secret != app.config['SERVERS_QUERY_BY_TAG']:
+        app.logger.info('Wrong or missing authentication')
+        abort(403)
+
+    try:
+        tags = request.headers.get('tags')
+    except:
+        app.logger.info('No tags specified, aborting.')
+        abort(403)
+    if not tags:
+        app.logger.info('No tags specified, aborting.')
+        abort(403)
+
+    # TODO: Implement tag logic and query for it here. For now simply return all active servers
+    servers = Server.query.filter_by(active=True).all()
+    if not servers:
+        app.logger.info('No active servers found')
+        return '', HTTP_204_NO_CONTENT
+
+    server_list = []
+    for server in servers:
+        server_list.append(server.uuid)
+
+    return jsonify({'servers': server_list})
+
 __author__ = "Peter Senna Tschudin"
 __copyright__ = "Copyright (C) 2018 Peter Senna Tschudin"
 __license__ = "GPLv2"
