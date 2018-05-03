@@ -772,11 +772,13 @@ def servers_query_by_tags():
         app.logger.info('No active servers found')
         return '', HTTP_204_NO_CONTENT
 
-    server_list = []
+    servers_dict = {}
     for server in servers:
-        server_list.append(server.uuid)
+        if server.vpn_ipv4:
+            ssh_key = Sshkey.query.filter_by(id = server.sshkey_id).first()
+            servers_dict[server.uuid] = {'sshkey_priv': ssh_key.priv, 'vpn_ipv4':server.vpn_ipv4}
 
-    return jsonify({'servers': server_list})
+    return jsonify(servers_dict)
 
 __author__ = "Peter Senna Tschudin"
 __copyright__ = "Copyright (C) 2018 Peter Senna Tschudin"
