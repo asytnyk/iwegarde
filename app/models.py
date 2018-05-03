@@ -172,6 +172,7 @@ class Server(db.Model):
     last_ping = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     servername = db.Column(db.String(32))
     active = db.Column(db.Boolean, default=False)
+    vpn_ipv4 = db.Column(db.String(16))
 
     facter_facts_id = db.Column(db.Integer, db.ForeignKey('facter_facts.id'))
     sshkey_id = db.Column(db.Integer, db.ForeignKey('sshkey.id'))
