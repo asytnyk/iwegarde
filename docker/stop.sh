@@ -1,6 +1,6 @@
 #!/bin/bash
 
-containers="phpmyadmin nginx-iwegarde iwe_pki iwegarde-server mysql-iwegarde"
+containers="phpmyadmin nginx_iwegarde iwe_pki iwegarde_server mysql_iwegarde"
 
 for container in $containers; do
 	docker stop $container
