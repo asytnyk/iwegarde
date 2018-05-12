@@ -4,10 +4,10 @@
                         <td align="left">last ping</td>
 			<td align="left">manufacturer</td>
 			<td align="left">productname</td>
-			<td align="left">serial</td>
 			<td align="left">RAM size</td>
                         <td align="left">MAC addr</td>
-			<td align="left">server status</td>
+			<td align="left">External IP</td>
+			<td align="left">status</td>
 			<td align="left">action</td>
                 </tr>
 		{% for server in servers %}
@@ -17,9 +17,13 @@
 				<td align="left">{{ inject_datetime_delta(server.last_ping)['time_ago_str'] }}</td>
 				<td align="left">{{ facts.get_manufacturer()[:16] }}</td>
 				<td align="left">{{ facts.get_productname()[:16] }}</rd>
-				<td align="left">{{ facts.serialnumber[-16:] }}</td>
 				<td align="left">{{ facts.memorysize }}</td>
 				<td align="left">{{ facts.get_macaddress() }}</td>
+				{% if server.external_ipv4 %}
+				<td align="left">{{ server.external_ipv4[-16:] }}</td>
+				{% else %}
+				<td align="left">-</td> 
+				{% endif %}
 				{% if server.active %}
 				<td align="left">active</a></td>
 				{% else %}
