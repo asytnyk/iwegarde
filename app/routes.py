@@ -724,6 +724,7 @@ def vpn_client_connect(vpn_name, uuid):
         return jsonify({'uuid': uuid, 'vpn-name': vpn_name, 'allow-connection': 'False'})
 
     server.vpn_ipv4 = vpn_client_json['ifconfig_pool_remote_ip']
+    server.external_ipv4 = vpn_client_json['trusted_ip']
     server.last_ping = datetime.utcnow()
     db.session.commit()
 
