@@ -777,7 +777,7 @@ def servers_query_by_tags():
     for server in servers:
         if server.vpn_ipv4:
             ssh_key = Sshkey.query.filter_by(id = server.sshkey_id).first()
-            servers_dict[server.uuid] = {'sshkey_priv': ssh_key.priv, 'vpn_ipv4':server.vpn_ipv4}
+            servers_dict[server.uuid] = {'sshkey_priv': ssh_key.priv, 'vpn_ipv4':server.vpn_ipv4, 'external_ipv4':server.external_ipv4}
 
     return jsonify(servers_dict)
 
