@@ -661,6 +661,10 @@ def delete_server(uuid):
 
     form = DeleteServerForm()
     if form.validate_on_submit():
+        if form.username.data != current_user.username:
+            flash('Wrong username.')
+            return redirect(url_for('delete_server', uuid=uuid))
+
         if not current_user.check_password(form.password.data):
             flash('Wrong password.')
             return redirect(url_for('delete_server', uuid=uuid))
@@ -682,6 +686,7 @@ def delete_server(uuid):
         return redirect(url_for('list_servers'))
 
     elif request.method == 'GET':
+        form.username.data = current_user.username
         return render_template('delete_server.html', title='Delete Your Server', form=form,
                 servers=[server,])
     else:
