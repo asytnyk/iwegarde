@@ -665,10 +665,6 @@ def delete_server(uuid):
             flash('Wrong password.')
             return redirect(url_for('delete_server', uuid=uuid))
 
-        if form.serialnumber.data != facts.serialnumber:
-            flash('Wrong serial number.')
-            return redirect(url_for('delete_server', uuid=uuid))
-
         if form.macaddress.data.lower() != facts.get_macaddress().lower():
             flash('Wrong MAC address.')
             return redirect(url_for('delete_server', uuid=uuid))
