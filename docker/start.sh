@@ -90,6 +90,7 @@ docker run \
 	-d \
 	--restart unless-stopped \
 	-v /mnt/stateful_partition/iwe/static-content:/static-content \
+	-v /mnt/stateful_partition/iwe/letsencrypt:/letsencrypt \
 	--name nginx_iwegarde \
 	-p 443:5000 \
 	-p 80:5080 \
