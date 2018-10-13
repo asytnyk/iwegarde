@@ -1,0 +1,16 @@
+To update the certificate:
+
+ 1 - from your notebook call: $ sudo certbot certonly -a manual -d beta.iwe.cloud
+
+ 2 - Save the challenge at: beta.iwe.cloud:/mnt/stateful_partition/iwe/letsencrypt/.well-known/acme-challenge/
+
+ 3 - from your notebook:
+	$ sudo cp /etc/letsencrypt/live/beta.iwe.cloud/privkey.pem /home/peter/dev/iwegarde/docker/nginx-iwegarde/
+	$ sudo cp /etc/letsencrypt/live/beta.iwe.cloud/fullchain.pem /home/peter/dev/iwegarde/docker/nginx-iwegarde/
+	$ cd /home/peter/dev/iwegarde/docker/nginx-iwegarde/
+	$ git add .;git commit -m 'update ssl keys';git push
+
+ 4 - from beta.iwe.cloud
+	$ bash dev/iwegarde/docker/build.sh
+	$ bash dev/iwegarde/docker/stop.sh --rm
+	$ bash dev/iwegarde/docker/start.sh
