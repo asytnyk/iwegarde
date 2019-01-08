@@ -1,0 +1,6 @@
+This is the web frontend of iWe. It has some API entry points, and allow the
+user to activate, add, and remove servers.
+
+Copyright 2017 Peter Senna Tschudin <peter.senna@iwe.io>
+
+Licensed under GPLv2.
